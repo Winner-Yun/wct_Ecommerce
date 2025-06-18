@@ -50,6 +50,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/user/demote/{id}', [UserController::class, 'demoteToUser']);
     Route::post('/user/ban/{id}', [UserController::class, 'banUser']);
     Route::post('/admin/create', [UserController::class, 'createAdmin']);
+    Route::post('/users/unban/{id}', [UserController::class, 'unbanUser']);
 });
 
 
