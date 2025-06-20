@@ -87,4 +87,41 @@ class OrderController extends Controller
         }
     }
 
+    public function destroy($id): JsonResponse
+        {
+            $user = auth()->user();
+
+            $order = Order::with('items')->where('id', $id)->where('user_id', $user->id)->first();
+
+            if (!$order) {
+                return response()->json(['message' => 'Order not found or unauthorized'], 404);
+            }
+
+            DB::beginTransaction();
+
+            try {
+        
+                foreach ($order->items as $item) {
+                    $item->product->increment('stock', $item->quantity);
+                }
+
+                // Delete order items
+                $order->items()->delete();
+
+
+                $order->delete();
+
+                DB::commit();
+
+                return response()->json(['message' => 'Order deleted successfully']);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'Failed to delete order',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+        }
+
+
 }

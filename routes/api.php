@@ -32,9 +32,10 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::post('/categories', [CategoryController::class, 'store'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/orders', [OrderController::class, 'store']); // place order
+    Route::post('/orders', [OrderController::class, 'store']);
     Route::apiResource('categories', CategoryController::class);
-    Route::get('/orders', [OrderController::class, 'index']);  // view user’s orders
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->middleware('auth:sanctum');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
