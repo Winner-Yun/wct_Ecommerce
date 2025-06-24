@@ -53,7 +53,7 @@ class AuthController extends Controller
 
         return response()->json([
             'token' => $user->createToken('api-token')->plainTextToken,
-            'user' => $user->only(['id', 'name', 'email']),
+            'user' => $user->only(['id', 'name', 'email', 'role']),
         ]);
     }
 
